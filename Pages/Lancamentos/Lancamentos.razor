@@ -1,0 +1,202 @@
+﻿@page "/lancamentos"
+
+@using System.Net.Http.Json
+@using MudBlazor
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+
+<h3>Lancamentos</h3>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" @bind-ActivePanelIndex="activeIndex">
+    <MudTabPanel Text="Tab One" ID='"pn_one"' ToolTip="ToolTip One">
+        <MudText>Content One</MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Tab Two" ID='"pn_two"' ToolTip="ToolTip Two">
+        <MudText>Content Two</MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Tab Three" ID='"pn_three"' ToolTip="ToolTip Three">
+        <MudText>Content Three</MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Tab Disabled" Disabled="true" ID='"pn_four"' ToolTip="ToolTip Disabled">
+        <MudText>Content Disabled</MudText>
+    </MudTabPanel>
+</MudTabs>
+
+@* <MudTable Items="@dados.ListaItems" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh DataLabel="Dia">Dia</MudTh>
+        <MudTh DataLabel="ValorComNota">Valor com nota</MudTh>
+        <MudTh DataLabel="ValorSemNota">Valor sem nota</MudTh>
+        <MudTh DataLabel="TotalDia">Total</MudTh>
+    </HeaderContent>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Dia"><MudTextField @bind-Value="@context.Dia" Disabled/></MudTd>
+        <MudTd DataLabel="ValorComNota"><MudTextField @bind-Value="@context.ValorComNota" Required /></MudTd>
+        <MudTd DataLabel="ValorSemNota"><MudTextField @bind-Value="@context.ValorSemNota" Disabled /></MudTd>
+        <MudTd DataLabel="TotalDia"><MudTextField @bind-Value="@context.TotalDia" Disabled /></MudTd>
+    </RowEditingTemplate>
+</MudTable> *@
+
+
+
+
+
+<MudTable Items="@dados.ListaItems" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit"
+          @bind-SelectedItem="selectedItem1" SortLabel="Sort By" CommitEditTooltip="Confirmar inclusão dos valores"
+          OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
+          RowEditCommit="ItemHasBeenCommitted" IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+   @*  <ColGroup>
+        <col style="width:10%;" />
+        <col style="width:30%;" />
+        <col style="width:30%;" />
+        <col style="width:30%;" />
+    </ColGroup> *@
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.Dia)">Dia</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.ValorComNota)">Valor com nota</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.ValorSemNota)">Valor sem nota</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.TotalDia)">Total</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Dia">@context.Dia</MudTd>
+        <MudTd DataLabel="ValorComNota">@context.ValorComNota</MudTd>
+        <MudTd DataLabel="ValorSemNota">@context.ValorSemNota</MudTd>
+        <MudTd DataLabel="TotalDia">@context.TotalDia</MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Dia">@context.Dia</MudTd>
+        <MudTd DataLabel="ValorComNota">
+            <MudTextField @bind-Value="@context.ValorComNota" />
+        </MudTd>
+        <MudTd DataLabel="ValorSemNota">
+            <MudTextField @bind-Value="@context.ValorSemNota" />
+        </MudTd>
+        <MudTd DataLabel="TotalDia">@context.TotalDia</MudTd>
+       
+    </RowEditingTemplate>
+    @* <PagerContent>
+        <MudTablePager />
+    </PagerContent> *@
+    @* <EditButtonContent Context="button">
+        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent> *@
+</MudTable>
+
+
+@code {
+    int activeIndex = 2;
+    Dados dados = new();
+
+
+    private bool _hidePosition;
+    private bool _loading;
+
+    private List<string> editEvents = new();
+    private bool dense = false;
+    private bool hover = true;
+    private bool ronly = false;
+    private bool canCancelEdit = false;
+    private bool blockSwitch = false;
+    private string searchString = "";
+    private Items selectedItem1 = null;
+    private Items elementBeforeEdit;
+    private HashSet<Items> selectedItems1 = new HashSet<Items>();
+    private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.End;
+    private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.End;
+    private TableEditTrigger editTrigger = TableEditTrigger.RowClick;
+    private IEnumerable<Items> Elements = new List<Items>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Elements = await httpClient.GetFromJsonAsync<List<Element>>("webapi/periodictable");
+
+        dados.Ano = 2024;
+        dados.Mes = 6;
+        dados.ListaItems = new();
+
+
+        var dataAtual = DateTime.Now;
+        var primeiroDia = new DateTime(dataAtual.Year, dataAtual.Month, 1);
+        DateTime ultimoDia = primeiroDia.AddMonths(1).AddDays(-1);
+
+        for (int i = primeiroDia.Day; i <= ultimoDia.Day; i++)
+        {
+            dados.ListaItems.Add(new Items
+                {
+                    Dia = i,
+                });
+        }
+
+
+
+    }
+
+    private void ClearEventLog()
+    {
+        editEvents.Clear();
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+
+    private void BackupItem(object element)
+    {
+        elementBeforeEdit = new()
+            {
+                Dia = ((Items)element).Dia,
+                ValorComNota = ((Items)element).ValorComNota,
+                ValorSemNota = ((Items)element).ValorSemNota,
+                TotalDia = ((Items)element).TotalDia
+            };
+        AddEditionEvent($"RowEditPreview event: made a backup of Element {((Items)element).Dia}");
+    }
+
+    private void ItemHasBeenCommitted(object element)
+    {
+        AddEditionEvent($"RowEditCommit event: Changes to Element {((Items)element).Dia} committed");
+    }
+
+    private void ResetItemToOriginalValues(object element)
+    {
+        ((Items)element).Dia = elementBeforeEdit.Dia;
+        ((Items)element).ValorComNota = elementBeforeEdit.ValorComNota;
+        ((Items)element).ValorSemNota = elementBeforeEdit.ValorSemNota;
+        ((Items)element).TotalDia = elementBeforeEdit.TotalDia;
+        AddEditionEvent($"RowEditCancel event: Editing of Element {((Items)element).Dia} canceled");
+    }
+
+    private bool FilterFunc(Items element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Dia.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ValorComNota.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ValorSemNota.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Dia} {element.ValorComNota} {element.ValorSemNota}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    public class Dados
+    {
+        public int Mes { get; set; }
+        public int Ano { get; set; }
+        public List<Items> ListaItems { get; set; }
+    }
+
+    public class Items
+    {
+        public int Dia { get; set; }
+        public decimal? ValorComNota { get; set; }
+        public decimal? ValorSemNota { get; set; }
+        public decimal? TotalDia { get; set; }
+    }
+}
+
+
