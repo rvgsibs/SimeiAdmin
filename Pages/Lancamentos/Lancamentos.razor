@@ -59,19 +59,19 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Dia">@context.Dia</MudTd>
-        <MudTd DataLabel="ValorComNota">@context.ValorComNota</MudTd>
-        <MudTd DataLabel="ValorSemNota">@context.ValorSemNota</MudTd>
-        <MudTd DataLabel="TotalDia">@context.TotalDia</MudTd>
+        <MudTd DataLabel="Valor com nota">@context.ValorComNota</MudTd>
+        <MudTd DataLabel="Valor sem nota">@context.ValorSemNota</MudTd>
+        <MudTd DataLabel="Total dia">@context.TotalDia</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Dia">@context.Dia</MudTd>
-        <MudTd DataLabel="ValorComNota">
+        <MudTd DataLabel="Valor com nota">
             <MudTextField @bind-Value="@context.ValorComNota" />
         </MudTd>
-        <MudTd DataLabel="ValorSemNota">
+        <MudTd DataLabel="Valor sem nota">
             <MudTextField @bind-Value="@context.ValorSemNota" />
         </MudTd>
-        <MudTd DataLabel="TotalDia">@context.TotalDia</MudTd>
+        <MudTd DataLabel="Total dia">@context.TotalDia</MudTd>
        
     </RowEditingTemplate>
     @* <PagerContent>
@@ -161,27 +161,14 @@
 
     private void ResetItemToOriginalValues(object element)
     {
-        ((Items)element).Dia = elementBeforeEdit.Dia;
-        ((Items)element).ValorComNota = elementBeforeEdit.ValorComNota;
-        ((Items)element).ValorSemNota = elementBeforeEdit.ValorSemNota;
-        ((Items)element).TotalDia = elementBeforeEdit.TotalDia;
-        AddEditionEvent($"RowEditCancel event: Editing of Element {((Items)element).Dia} canceled");
+        // ((Items)element).Dia = elementBeforeEdit.Dia;
+        // ((Items)element).ValorComNota = elementBeforeEdit.ValorComNota;
+        // ((Items)element).ValorSemNota = elementBeforeEdit.ValorSemNota;
+        // ((Items)element).TotalDia = elementBeforeEdit.TotalDia;
+        // AddEditionEvent($"RowEditCancel event: Editing of Element {((Items)element).Dia} canceled");
     }
 
-    private bool FilterFunc(Items element)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.Dia.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.ValorComNota.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.ValorSemNota.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if ($"{element.Dia} {element.ValorComNota} {element.ValorSemNota}".Contains(searchString))
-            return true;
-        return false;
-    }
+
 
     public class Dados
     {
