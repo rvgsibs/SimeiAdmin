@@ -1,4 +1,4 @@
-﻿namespace TemplateBlazorAdmin.Core.Response;
+﻿namespace SimeiAdmin.Core.Response;
 
 public class LoginResponse
 {

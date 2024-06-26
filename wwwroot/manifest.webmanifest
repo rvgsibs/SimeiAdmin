@@ -1,6 +1,6 @@
 {
-  "name": "TemplateBlazorAdmin",
-  "short_name": "TemplateBlazorAdmin",
+  "name": "SimeiAdmin",
+  "short_name": "SimeiAdmin",
   "id": "./",
   "start_url": "./",
   "display": "standalone",

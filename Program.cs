@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
-using TemplateBlazorAdmin;
-using TemplateBlazorAdmin.Core;
-using TemplateBlazorAdmin.Core.Services;
-using TemplateBlazorAdmin.Core.Services.Interface;
+using SimeiAdmin;
+using SimeiAdmin.Core;
+using SimeiAdmin.Core.Services;
+using SimeiAdmin.Core.Services.Interface;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

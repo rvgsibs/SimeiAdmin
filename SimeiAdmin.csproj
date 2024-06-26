@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TemplateBlazorAdmin.Core\**" />
-    <Content Remove="TemplateBlazorAdmin.Core\**" />
-    <EmbeddedResource Remove="TemplateBlazorAdmin.Core\**" />
-    <None Remove="TemplateBlazorAdmin.Core\**" />
+    <Compile Remove="SimeiAdmin.Core\**" />
+    <Content Remove="SimeiAdmin.Core\**" />
+    <EmbeddedResource Remove="SimeiAdmin.Core\**" />
+    <None Remove="SimeiAdmin.Core\**" />
   </ItemGroup>
 
   <ItemGroup>

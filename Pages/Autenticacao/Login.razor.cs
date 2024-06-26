@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using TemplateBlazorAdmin.Core.Request;
-using TemplateBlazorAdmin.Core.Services.Interface;
+using SimeiAdmin.Core.Request;
+using SimeiAdmin.Core.Services.Interface;
 
-namespace TemplateBlazorAdmin.Pages.Autenticacao;
+namespace SimeiAdmin.Pages.Autenticacao;
 
 public partial class LoginPage : ComponentBase
 {

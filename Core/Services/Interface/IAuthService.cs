@@ -1,7 +1,7 @@
-﻿using TemplateBlazorAdmin.Core.Request;
-using TemplateBlazorAdmin.Core.Response;
+﻿using SimeiAdmin.Core.Request;
+using SimeiAdmin.Core.Response;
 
-namespace TemplateBlazorAdmin.Core.Services.Interface;
+namespace SimeiAdmin.Core.Services.Interface;
 
 public interface IAuthService
 {

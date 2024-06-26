@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace TemplateBlazorAdmin.Core;
+namespace SimeiAdmin.Core;
 
 public class ApiAuthenticationStateProvider : AuthenticationStateProvider
 {

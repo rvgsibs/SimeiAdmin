@@ -1,10 +1,10 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using TemplateBlazorAdmin.Core.Request;
-using TemplateBlazorAdmin.Core.Response;
-using TemplateBlazorAdmin.Core.Services.Interface;
+using SimeiAdmin.Core.Request;
+using SimeiAdmin.Core.Response;
+using SimeiAdmin.Core.Services.Interface;
 
-namespace TemplateBlazorAdmin.Core.Services;
+namespace SimeiAdmin.Core.Services;
 
 public class AuthService : IAuthService
 {

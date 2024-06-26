@@ -1,4 +1,4 @@
-﻿namespace TemplateBlazorAdmin.Core.Request;
+﻿namespace SimeiAdmin.Core.Request;
 
 public class LoginRequest
 {
