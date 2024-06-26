@@ -51,6 +51,9 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
         if (string.IsNullOrWhiteSpace(dataToken)) return false;
 
+        //TODO
+        return true;
+
         DateTime dataAtualUtc = DateTime.UtcNow;
         DateTime dataExpiracao =
             DateTime.ParseExact(dataToken, "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", null,

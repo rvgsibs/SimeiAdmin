@@ -5,37 +5,6 @@
 @inject HttpClient httpClient
 @inject ISnackbar Snackbar
 
-<h3>Lancamentos</h3>
-
-<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" @bind-ActivePanelIndex="activeIndex">
-    <MudTabPanel Text="Tab One" ID='"pn_one"' ToolTip="ToolTip One">
-        <MudText>Content One</MudText>
-    </MudTabPanel>
-    <MudTabPanel Text="Tab Two" ID='"pn_two"' ToolTip="ToolTip Two">
-        <MudText>Content Two</MudText>
-    </MudTabPanel>
-    <MudTabPanel Text="Tab Three" ID='"pn_three"' ToolTip="ToolTip Three">
-        <MudText>Content Three</MudText>
-    </MudTabPanel>
-    <MudTabPanel Text="Tab Disabled" Disabled="true" ID='"pn_four"' ToolTip="ToolTip Disabled">
-        <MudText>Content Disabled</MudText>
-    </MudTabPanel>
-</MudTabs>
-
-@* <MudTable Items="@dados.ListaItems" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh DataLabel="Dia">Dia</MudTh>
-        <MudTh DataLabel="ValorComNota">Valor com nota</MudTh>
-        <MudTh DataLabel="ValorSemNota">Valor sem nota</MudTh>
-        <MudTh DataLabel="TotalDia">Total</MudTh>
-    </HeaderContent>
-    <RowEditingTemplate>
-        <MudTd DataLabel="Dia"><MudTextField @bind-Value="@context.Dia" Disabled/></MudTd>
-        <MudTd DataLabel="ValorComNota"><MudTextField @bind-Value="@context.ValorComNota" Required /></MudTd>
-        <MudTd DataLabel="ValorSemNota"><MudTextField @bind-Value="@context.ValorSemNota" Disabled /></MudTd>
-        <MudTd DataLabel="TotalDia"><MudTextField @bind-Value="@context.TotalDia" Disabled /></MudTd>
-    </RowEditingTemplate>
-</MudTable> *@
 
 
 
@@ -45,6 +14,27 @@
           @bind-SelectedItem="selectedItem1" SortLabel="Sort By" CommitEditTooltip="Confirmar inclusão dos valores"
           OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
           RowEditCommit="ItemHasBeenCommitted" IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Lançamentos</MudText>
+        <MudSpacer />
+        <MudPaper>
+            <MudMenu Label="@descricaoMes" MaxHeight="200" Variant="Variant.Filled" Color="Color.Primary" FullWidth="false">
+                <MudMenuItem OnClick="@(() => SelecionarMes(1, "Janeiro"))">Janeiro</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(2, "Fevereiro"))">Fevereiro</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(3, "Março"))">Março</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(4, "Abril"))">Abril</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(5, "Maio"))">Maio</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(6, "Junho"))">Junho</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(7, "Julho"))">Julho</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(8, "Agosto"))">Agosto</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(9, "Setembro"))">Setembro</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(10, "Outubro"))">Outubro</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(11, "Novembro"))">Novembro</MudMenuItem>
+                <MudMenuItem OnClick="@(() => SelecionarMes(12, "Dezembro"))">Dezembro</MudMenuItem>
+            </MudMenu>
+        </MudPaper>
+    </ToolBarContent>
    @*  <ColGroup>
         <col style="width:10%;" />
         <col style="width:30%;" />
@@ -53,23 +43,23 @@
     </ColGroup> *@
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.Dia)">Dia</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.ValorComNota)">Valor com nota</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.ValorSemNota)">Valor sem nota</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.VendasComNota)">Vendas com nota</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.VendasSemNota)">Vendas sem nota</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Items, object>(x=>x.TotalDia)">Total</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Dia">@context.Dia</MudTd>
-        <MudTd DataLabel="Valor com nota">@context.ValorComNota</MudTd>
-        <MudTd DataLabel="Valor sem nota">@context.ValorSemNota</MudTd>
+        <MudTd DataLabel="Vendas com nota">@context.VendasComNota</MudTd>
+        <MudTd DataLabel="Vendas sem nota">@context.VendasSemNota</MudTd>
         <MudTd DataLabel="Total dia">@context.TotalDia</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Dia">@context.Dia</MudTd>
-        <MudTd DataLabel="Valor com nota">
-            <MudTextField @bind-Value="@context.ValorComNota" />
+        <MudTd DataLabel="Vendas com nota">
+            <MudTextField @bind-Value="@context.VendasComNota" />
         </MudTd>
-        <MudTd DataLabel="Valor sem nota">
-            <MudTextField @bind-Value="@context.ValorSemNota" />
+        <MudTd DataLabel="Vendas sem nota">
+            <MudTextField @bind-Value="@context.VendasSemNota" />
         </MudTd>
         <MudTd DataLabel="Total dia">@context.TotalDia</MudTd>
        
@@ -84,8 +74,9 @@
 
 
 @code {
-    int activeIndex = 2;
+    int activeIndex = 0;
     Dados dados = new();
+    string descricaoMes = "Selecione mês";
 
 
     private bool _hidePosition;
@@ -110,22 +101,7 @@
     {
         // Elements = await httpClient.GetFromJsonAsync<List<Element>>("webapi/periodictable");
 
-        dados.Ano = 2024;
-        dados.Mes = 6;
-        dados.ListaItems = new();
-
-
-        var dataAtual = DateTime.Now;
-        var primeiroDia = new DateTime(dataAtual.Year, dataAtual.Month, 1);
-        DateTime ultimoDia = primeiroDia.AddMonths(1).AddDays(-1);
-
-        for (int i = primeiroDia.Day; i <= ultimoDia.Day; i++)
-        {
-            dados.ListaItems.Add(new Items
-                {
-                    Dia = i,
-                });
-        }
+        MontarObjeto();
 
 
 
@@ -147,8 +123,8 @@
         elementBeforeEdit = new()
             {
                 Dia = ((Items)element).Dia,
-                ValorComNota = ((Items)element).ValorComNota,
-                ValorSemNota = ((Items)element).ValorSemNota,
+                VendasComNota = ((Items)element).VendasComNota,
+                VendasSemNota = ((Items)element).VendasSemNota,
                 TotalDia = ((Items)element).TotalDia
             };
         AddEditionEvent($"RowEditPreview event: made a backup of Element {((Items)element).Dia}");
@@ -168,6 +144,35 @@
         // AddEditionEvent($"RowEditCancel event: Editing of Element {((Items)element).Dia} canceled");
     }
 
+    private void SelecionarMes(int mes, string descricao)
+    {
+        var teste = mes;
+        descricaoMes = descricao;
+    }
+
+    public void MontarObjeto()
+    {
+        dados.Ano = 2024;
+
+        for (int mes = 1; mes < 13; mes++)
+        {
+            dados.Mes = mes;
+            dados.ListaItems = new();
+
+            var primeiroDia = new DateTime(dados.Ano, mes, 1);
+            DateTime ultimoDia = primeiroDia.AddMonths(1).AddDays(-1);
+
+            for (int i = primeiroDia.Day; i <= ultimoDia.Day; i++)
+            {
+                dados.ListaItems.Add(new Items
+                    {
+                        Dia = i,
+                    });
+            }
+        }
+        
+    }
+
 
 
     public class Dados
@@ -180,8 +185,8 @@
     public class Items
     {
         public int Dia { get; set; }
-        public decimal? ValorComNota { get; set; }
-        public decimal? ValorSemNota { get; set; }
+        public decimal? VendasComNota { get; set; }
+        public decimal? VendasSemNota { get; set; }
         public decimal? TotalDia { get; set; }
     }
 }
