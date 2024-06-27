@@ -19,7 +19,24 @@
         <MudText Typo="Typo.h5">Lançamentos</MudText>
         <MudSpacer />
         <MudPaper>
-            <MudMenu Label="@descricaoMes" MaxHeight="200" Variant="Variant.Filled" Color="Color.Primary" FullWidth="false">
+            <MudSelect @bind-Value="@MesSelecionado" Label="Selecione o mês" Variant="Variant.Outlined">
+                <MudSelectItem Value="@("Janeiro")" />
+                <MudSelectItem Value="@("Fevereiro")" />
+                <MudSelectItem Value="@("Março")" />
+                <MudSelectItem Value="@("Abril")" />
+                <MudSelectItem Value="@("Maio")" />
+                <MudSelectItem Value="@("Junho")" />
+                <MudSelectItem Value="@("Julho")" />
+                <MudSelectItem Value="@("Agosto")" />
+                <MudSelectItem Value="@("Setembro")" />
+                <MudSelectItem Value="@("Outubro")" />
+                <MudSelectItem Value="@("Novembro")" />
+                <MudSelectItem Value="@("Dezembro")" />
+            </MudSelect>
+           
+
+
+           @*  <MudMenu Label="@descricaoMes" MaxHeight="200" Variant="Variant.Filled" Color="Color.Primary" FullWidth="false">
                 <MudMenuItem OnClick="@(() => SelecionarMes(1, "Janeiro"))">Janeiro</MudMenuItem>
                 <MudMenuItem OnClick="@(() => SelecionarMes(2, "Fevereiro"))">Fevereiro</MudMenuItem>
                 <MudMenuItem OnClick="@(() => SelecionarMes(3, "Março"))">Março</MudMenuItem>
@@ -32,7 +49,7 @@
                 <MudMenuItem OnClick="@(() => SelecionarMes(10, "Outubro"))">Outubro</MudMenuItem>
                 <MudMenuItem OnClick="@(() => SelecionarMes(11, "Novembro"))">Novembro</MudMenuItem>
                 <MudMenuItem OnClick="@(() => SelecionarMes(12, "Dezembro"))">Dezembro</MudMenuItem>
-            </MudMenu>
+            </MudMenu> *@
         </MudPaper>
     </ToolBarContent>
    @*  <ColGroup>
@@ -77,6 +94,9 @@
     int activeIndex = 0;
     Dados dados = new();
     string descricaoMes = "Selecione mês";
+
+    List<Mes> listMes = new();
+    string MesSelecionado = "Selecione mês";
 
 
     private bool _hidePosition;
@@ -152,7 +172,12 @@
 
     public void MontarObjeto()
     {
-        dados.Ano = 2024;
+        var dataAtual = DateTime.Now;
+        MontarMes();
+
+        MesSelecionado = listMes.Where(x => x.Id == dataAtual.Month).FirstOrDefault().Descricao;
+
+        dados.Ano = dataAtual.Year;
 
         for (int mes = 1; mes < 13; mes++)
         {
@@ -170,8 +195,35 @@
                     });
             }
         }
-        
+
     }
+
+
+
+    public void MontarMes()
+    {
+        listMes.Add(new Mes { Id = 1, Descricao = "Janeiro" });
+        listMes.Add(new Mes { Id = 2, Descricao = "Fevereiro" });
+        listMes.Add(new Mes { Id = 3, Descricao = "Março" });
+        listMes.Add(new Mes { Id = 4, Descricao = "Abril" });
+        listMes.Add(new Mes { Id = 5, Descricao = "Maio" });
+        listMes.Add(new Mes { Id = 6, Descricao = "Junho" });
+        listMes.Add(new Mes { Id = 7, Descricao = "Julho" });
+        listMes.Add(new Mes { Id = 8, Descricao = "Agosto" });
+        listMes.Add(new Mes { Id = 9, Descricao = "Setembro" });
+        listMes.Add(new Mes { Id = 10, Descricao = "Outubro" });
+        listMes.Add(new Mes { Id = 11, Descricao = "Novembro" });
+        listMes.Add(new Mes { Id = 12, Descricao = "Dezembro" });
+    }
+
+
+
+    public class Mes
+    {
+        public int Id { get; set; }
+        public string Descricao { get; set; }
+    }
+
 
 
 
