@@ -38,12 +38,9 @@ public partial class LoginPage : ComponentBase
                 var result = await AuthService.Login(InputRequest);
 
                 if (result is not null && result.Token is not null)
-                {
-                    ExibirMensagem("Login efetuado com sucesso.", Severity.Success);
-                    NavigationManager.NavigateTo("/");
-                }
+                    LoginEfetuado();
                 else
-                    ExibirMensagem("Usuário e/ou senha inválidos.");
+                    ExibirMensagem("Não foi possível fazer o Login : Usuário e/ou senha inválidos.");
             }
         }
         catch (Exception ex)
@@ -56,7 +53,7 @@ public partial class LoginPage : ComponentBase
     {
         if (string.IsNullOrWhiteSpace(InputRequest.Usuario) || string.IsNullOrWhiteSpace(InputRequest.Senha))
         {
-            ExibirMensagem("Usuário e/ou senha inválidos.");
+            ExibirMensagem("Não foi possível fazer o Login : Favor preencher usuário e senha.", Severity.Warning);
             return false;
         }
         return true;
@@ -64,6 +61,7 @@ public partial class LoginPage : ComponentBase
 
     private void ExibirMensagem(string mensagem, Severity serverity = Severity.Error)
     {
+        SnackbarService.RemoveByKey("Login");
         var config = (SnackbarOptions options) =>
         {
             options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
@@ -72,6 +70,11 @@ public partial class LoginPage : ComponentBase
         SnackbarService.Add(mensagem, serverity, configure: config, key: "Login");
     }
 
+    private void LoginEfetuado()
+    {
+        SnackbarService.RemoveByKey("Login");
+        NavigationManager.NavigateTo("/");
+    }
 
     #endregion
 }

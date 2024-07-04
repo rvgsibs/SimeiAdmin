@@ -21,6 +21,8 @@
     <PackageReference Include="MudExRichTextEditor" Version="1.0.9" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.34" />
   </ItemGroup>
 
   <ItemGroup>

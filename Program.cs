@@ -14,7 +14,13 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddHttpClient("Api", options =>
+{
+    options.BaseAddress = new Uri("https://dasnsimei-backend.onrender.com/");
+    //options.BaseAddress = new Uri("http://localhost:40441/");
+}).AddHttpMessageHandler<CustomHttpHandler>();
+
+builder.Services.AddScoped<CustomHttpHandler>();
 
 builder.Services.AddMudServices(config =>
 {
@@ -34,7 +40,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStatePr
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 
-builder.Services.AddScoped<ILoginService, LoginService>();
+
 
 
 await builder.Build().RunAsync();

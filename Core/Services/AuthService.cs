@@ -1,46 +1,49 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using SimeiAdmin.Core.Extensions;
 using SimeiAdmin.Core.Request;
 using SimeiAdmin.Core.Response;
 using SimeiAdmin.Core.Services.Interface;
+using System.Net.Http.Headers;
 
 namespace SimeiAdmin.Core.Services;
 
-public class AuthService : IAuthService
+public sealed class AuthService : IAuthService
 {
     private readonly AuthenticationStateProvider _authenticationStateProvider;
     private readonly ILocalStorageService _localStorage;
-    private readonly ILoginService _loginService;
+    private readonly HttpClient _httpClient;
 
-    public AuthService(ILoginService loginService,
+    public AuthService(IHttpClientFactory httpClientFactory,
         AuthenticationStateProvider authenticationStateProvider,
         ILocalStorageService localStorage)
     {
-        _loginService = loginService;
         _authenticationStateProvider = authenticationStateProvider;
         _localStorage = localStorage;
+        _httpClient = httpClientFactory.CreateClient("Api");
     }
 
-    public async Task<LoginResponse>? Login(LoginRequest loginRequest)
+    public async Task<LoginResponse> Login(LoginRequest loginModel)
     {
-        var result = await _loginService.Login(loginRequest);
+        var response = await _httpClient.PostAsync("api/Login", loginModel.ToStringContent());
 
-        if (result is null)
-            return null;
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Usuário/senha inválidos.");
 
+        var loginResult = await response.ToDeserializeAsync<LoginResponse>();
 
-        await _localStorage.SetItemAsync("authToken", result.Token);
-        await _localStorage.SetItemAsync("tokenExpiration", result.Expiration);
-        await _localStorage.SetItemAsync("nomeUsuario", result.NomeUsuario);
+        await _localStorage.SetItemAsync("authToken", loginResult.Token);
+        await _localStorage.SetItemAsync("tokenExpiration", loginResult.Expiration);
+        await _localStorage.SetItemAsync("nomeUsuario", loginResult.NomeUsuario);
 
         ((ApiAuthenticationStateProvider)_authenticationStateProvider)
-                            .MarkUserAsAuthenticated(result.NomeUsuario);
+                            .MarkUserAsAuthenticated(loginModel.Usuario);
 
-        //httpClient.DefaultRequestHeaders.Authorization =
-        //            new AuthenticationHeaderValue("bearer",
-        //                                             loginResult.Token);
+        _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("bearer",
+                                                     loginResult.Token);
 
-        return result;
+        return loginResult;
     }
 
     public async Task Logout()
@@ -48,6 +51,7 @@ public class AuthService : IAuthService
         await _localStorage.RemoveItemAsync("authToken");
 
         ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-        //httpClient.DefaultRequestHeaders.Authorization = null;
+        _httpClient.DefaultRequestHeaders.Authorization = null;
     }
+
 }

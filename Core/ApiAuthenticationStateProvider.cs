@@ -19,7 +19,7 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         var savedToken = await _localStorage.GetItemAsync<string>("authToken");
         var expirationToken = await _localStorage.GetItemAsync<string>("tokenExpiration");
 
-        if (string.IsNullOrWhiteSpace(savedToken) || TokenExpirou(expirationToken ?? ""))
+        if (string.IsNullOrWhiteSpace(savedToken) || TokenExpirou(expirationToken))
         {
             MarkUserAsLoggedOut();
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -49,11 +49,6 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
 
     private bool TokenExpirou(string dataToken)
     {
-        if (string.IsNullOrWhiteSpace(dataToken)) return false;
-
-        //TODO
-        return true;
-
         DateTime dataAtualUtc = DateTime.UtcNow;
         DateTime dataExpiracao =
             DateTime.ParseExact(dataToken, "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", null,
@@ -71,7 +66,6 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         var payload = jwt.Split('.')[1];
         var jsonBytes = ParseBase64WithoutPadding(payload);
         var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-
 
         keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
 
