@@ -1,0 +1,85 @@
+﻿@page "/empresa"
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Nome" HelperText="Max. 100 caracteres"
+                                  @bind-Value="model.Nome" For="@(() => model.Nome)" Variant="@Variant.Outlined" />
+                    <MudTextField Label="CNPJ" HelperText="Max. 18 caracteres"
+                                  @bind-Value="model.CNPJ" For="@(() => model.CNPJ)" Variant="@Variant.Outlined" />
+
+
+                    @* <MudTextField Label="Email" Class="mt-3"
+                                  @bind-Value="model.Email" For="@(() => model.Email)" />
+                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                                  @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+                    <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
+                                  @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password" /> *@
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
+                @if (success)
+                {
+                    <MudText Color="Color.Success">Success</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                Fill out the form correctly to see the success message.
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+@code {
+    EmpresaRequest model = new EmpresaRequest();
+    bool success;
+
+    public class EmpresaRequest
+    {
+        public string Id { get; set; }
+
+        [Required(ErrorMessage = "Informe o nome da empresa")]
+        [StringLength(100, ErrorMessage = "Nome da empresa pode ter no máximo 100 caracteres.")]
+        public string Nome { get; set; }
+
+        [Required(ErrorMessage = "Informe o CNPJ da empresa")]
+        [StringLength(18, ErrorMessage = "O CNPJ da empresa pode ter no máximo 18 caracteres.")]
+        public string CNPJ { get; set; }
+
+        // [Required]
+        // [EmailAddress]
+        // public string Email { get; set; }
+
+        // [Required]
+        // [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
+        // public string Password { get; set; }
+
+        // [Required]
+        // [Compare(nameof(Password))]
+        // public string Password2 { get; set; }
+
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+    }
+
+}
