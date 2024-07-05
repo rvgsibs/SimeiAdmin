@@ -49,16 +49,22 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
 
     private bool TokenExpirou(string dataToken)
     {
-        DateTime dataAtualUtc = DateTime.UtcNow;
-        DateTime dataExpiracao =
-            DateTime.ParseExact(dataToken, "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", null,
-            System.Globalization.DateTimeStyles.RoundtripKind);
+        DateTime dataAtualUtc = DateTime.UtcNow.AddHours(-3);
+
+        var dataExpiracao = DateTime.Parse(dataToken);
+
+        // DateTime dataExpiracao =
+        //DateTime.ParseExact(dataToken, "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", null,
+        //System.Globalization.DateTimeStyles.RoundtripKind);
 
         if (dataExpiracao < dataAtualUtc)
         {
             return true;
         }
         return false;
+
+
+
     }
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {

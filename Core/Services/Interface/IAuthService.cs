@@ -8,4 +8,6 @@ public interface IAuthService
     Task<LoginResponse> Login(LoginRequest loginRequest);
 
     Task Logout();
+
+    Task<string> NomeUsuario();
 }

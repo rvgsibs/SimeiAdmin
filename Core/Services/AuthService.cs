@@ -54,4 +54,13 @@ public sealed class AuthService : IAuthService
         _httpClient.DefaultRequestHeaders.Authorization = null;
     }
 
+    public async Task<string> NomeUsuario()
+    {
+        var nome = await _localStorage.GetItemAsync<string>("nomeUsuario");
+
+        return nome ?? "Administrador";
+
+
+    }
+
 }

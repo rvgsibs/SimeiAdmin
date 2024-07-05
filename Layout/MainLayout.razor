@@ -18,8 +18,8 @@
                                      Icon="@Icons.Material.Filled.DarkMode" Title="Modo escuro" Color="Color.Surface"
                                      ToggledIcon="@Icons.Material.Filled.LightMode" ToggledTitle="Modo claro" ToggledColor="Color.Surface">
                 </MudToggleIconButton>
-                <MudText>Admin</MudText>
-                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@Logout">Sair </MudButton>
+                <MudText Style="margin-right:5px !important">@_nome</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@Logout">Sair</MudButton>
             </MudAppBar>
 
             <MudDrawer @bind-Open="_isNavOpen" Elevation="1">
@@ -49,6 +49,7 @@
 @code {
     bool _isNavOpen = true;
     bool _isDarkMode = true;
+    string _nome = "";
 
     MudThemeProvider? _mudThemeProvider;
 
@@ -58,6 +59,7 @@
         {
             _isDarkMode = true;
             _isDarkMode = await _mudThemeProvider!.GetSystemPreference();
+            _nome = await AuthService.NomeUsuario();
             StateHasChanged();
         }
     }
@@ -65,6 +67,7 @@
     public async Task Logout()
     {
         AuthService.Logout();
+        
         NavigationManager.NavigateTo("/login");
 
     }
